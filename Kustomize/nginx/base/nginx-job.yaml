@@ -1,0 +1,14 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: myjob
+spec:
+  ttlSecondsAfterFinished: 100
+  completions: 7
+  template:
+    spec:
+      containers:
+      - name: pi
+        image: alpine
+        command: ["echo",  "Hello Daaaawg !!!!"]
+      restartPolicy: Never

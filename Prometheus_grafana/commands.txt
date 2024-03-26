@@ -1,0 +1,4 @@
+docker exec lab-prometheus-1 killall -HUP prometheus
+slack_webhook: https://hooks.slack.com/services/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
+openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -keyout prometheus.key -out prometheus.crt -subj "/C=BE/ST=Antwerp/L=Brasschaat/O=Inuits/CN=localhost" -addext "subjectAltName = DNS:localhost"
+3742

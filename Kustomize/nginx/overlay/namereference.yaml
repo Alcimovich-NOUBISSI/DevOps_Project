@@ -1,0 +1,5 @@
+nameReference: 
+- kind: StorageClass
+  fieldSpecs:
+    - path: spec/storageClassName
+      kind: PersistentVolumeClaim

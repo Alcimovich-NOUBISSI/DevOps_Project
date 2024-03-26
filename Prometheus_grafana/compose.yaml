@@ -1,0 +1,58 @@
+version: '3.8'
+services:
+  prometheus:
+    depends_on:
+      - prometheus-alertmanager-container
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./config/prometheus_rules.yml:/etc/prometheus/prometheus_rules.yml
+
+  promlens:
+    image: prom/promlens
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    volumes:
+      - ./config/:/etc/prometheus
+
+  prometheus-alertmanager-container:
+    image: ubuntu/prometheus-alertmanager:0.23-22.04_beta
+    ports:
+      - "9093:9093"
+    restart: unless-stopped
+    environment:
+      - TZ=UTC
+    volumes:
+      - ./config/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+      - ./templates/alertmanager.tmpl:/etc/alertmanager/templates/alertmanager.tmpl
+
+  postgresql-node-exporter:
+    image: quay.io/prometheuscommunity/postgres-exporter
+    ports:
+      - "9187:9187"
+    restart: unless-stopped
+    environment:
+      - DATA_SOURCE_NAME="postgresql://postgres:mysecretpassword@192.168.1.240:5432/postgres?sslmode=disable"
+    volumes:
+      - ./config/postgres_exporter.yml:/etc/postgres_exporter.yml
+    command: ["--config.file=/etc/postgres_exporter.yml"]
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    volumes:
+      - ./config_grafana:/var/lib/grafana
+
+  postgres:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword

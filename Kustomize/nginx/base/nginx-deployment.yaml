@@ -1,0 +1,97 @@
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: nginx-deployment
+# spec:
+#   replicas: 5
+#   selector:
+#     matchLabels:
+#       app: nginx
+#   template:
+#     metadata:
+#       labels:
+#         app: nginx
+#     spec:
+#       #serviceAccountName: isidore
+#       #automountServiceAccountToken: false
+#       volumes:
+#         # - name: config-volume
+#         #   configMap:
+#         #     name: dev-my-config-9228dt689t
+#         - name: config-volume
+#           persistentVolumeClaim: 
+#             claimName: dev-nginx-pvc
+#       containers:
+#       - name: nginx
+#         image: nginx
+#         volumeMounts:
+#           - name: config-volume
+#             mountPath: /usr/share/nginx/html
+#         resources:
+#           limits:
+#             memory: "128Mi"
+#             cpu: "100m"
+#         ports:
+#         - containerPort: 80
+#           name: nginx-port-name
+# --- 
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment-with-sc
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx-with-sc
+  template:
+    metadata:
+      labels:
+        app: nginx-with-sc
+    spec:
+      volumes:
+        - name: config-volume
+          persistentVolumeClaim: 
+            claimName: nginx-pvc-with-sc
+      containers:
+      - name: nginx-with-sc
+        image: nginx
+        volumeMounts:
+          - name: config-volume
+            mountPath: /usr/sha
+            cpu: "100m"
+        ports:
+        - containerPort: 84
+          name: nginx-sc-portre/nginx/html
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: nginx-deployment
+#   #namespace: nginx
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: nginx-nginx
+#   template:
+#     metadata:
+#       labels:
+#         app: nginx-nginx
+#     spec:
+#       #serviceAccountName: isidore-sa
+#       containers:
+#       - name: nginx
+#         image: nginx
+#         resources:
+#           limits:
+#             memory: "128Mi"
+#             cpu: "100m"
+#         ports:
+#         - containerPort: 80
+#           name: nginx-port-name

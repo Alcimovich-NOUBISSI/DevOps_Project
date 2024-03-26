@@ -1,0 +1,15 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: 
+  name: apache-ingress
+spec: 
+  podSelector: 
+    matchLabels:
+      app: apache-deployment
+  policyTypes: 
+    - Ingress
+  ingress: 
+  - from:
+      - namespaceSelector:
+          matchLabels:
+            app: nginx-deployment

@@ -1,0 +1,16 @@
+global:
+  resolve_timeout: 1m
+  slack_api_url: 'https://hooks.slack.com/services/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'
+  http_config:
+    tls_config:
+      insecure_skip_verify: true
+route:
+  receiver: 'slack-notifications'
+receivers:
+- name: 'slack-notifications'
+  slack_configs:
+  - channel: '#gulfcam_alert'
+    send_resolved: true
+    text: '{{ template "slack.postgres.text" }}'
+templates:
+- '/etc/alertmanager/templates/alertmanager.tmpl'
